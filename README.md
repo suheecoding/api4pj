@@ -1,5 +1,3 @@
-[TOC]
-
 ## 1. 프로젝트 기초 정보
 
 * **IDE Tool** : STS4 ( Spring Tools Suite 4 for Eclipse )
@@ -70,10 +68,10 @@
 
 #### **1. 소스 Import**
 
-              * Spring boot 를 실행합니다.
-              * 마우스 우클릭하여 **Import > Maven > Check out Maven Projects form SCM** 선택합니다.
-              * **SCM URL** 의 'git' 항목에 **https://github.com/suheecoding/api4pj.git** 를 입력합니다.
-              * **Finish** 버튼을 클릭하여 Import를 완료합니다.
+ * Spring boot 를 실행합니다.
+ * 마우스 우클릭하여 **Import > Maven > Check out Maven Projects form SCM** 선택합니다.
+ * **SCM URL** 의 'git' 항목에 **https://github.com/suheecoding/api4pj.git** 를 입력합니다.
+ * **Finish** 버튼을 클릭하여 Import를 완료합니다.
 
 
 
@@ -117,18 +115,18 @@ JSON 입력 값을 직접 파싱을 하고 인터페이스를 만드는 등을 �
 
 
 
-> ```
-> @GetMapping("/API1")
-> public ResponseEntity<List<API1ResultVO>> getAPI1(@RequestBody String reqBody)
-> 	throws JsonParseException, JsonMappingException, IOException {
-> 		
->     ObjectMapper mapper = new ObjectMapper();
->     API1ReqVO api1RepVO = mapper.readValue(reqBody, API1ReqVO.class);
-> 
->     List<API1ResultVO> resutVO = apiMapper.getAPI1(api1RepVO);
->     return new ResponseEntity<List<API1ResultVO>>(resutVO,HttpStatus.OK);
-> }
-> ```
+```
+ @GetMapping("/API1")
+ public ResponseEntity<List<API1ResultVO>> getAPI1(@RequestBody String reqBody)
+ 	throws JsonParseException, JsonMappingException, IOException {
+ 		
+     ObjectMapper mapper = new ObjectMapper();
+     API1ReqVO api1RepVO = mapper.readValue(reqBody, API1ReqVO.class);
+ 
+     List<API1ResultVO> resutVO = apiMapper.getAPI1(api1RepVO);
+     return new ResponseEntity<List<API1ResultVO>>(resutVO,HttpStatus.OK);
+ }
+ ```
 
 
 
