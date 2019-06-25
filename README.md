@@ -18,17 +18,14 @@
 
    * JDK를 다운 받아 원하는 경로에서 압축을 해제한다.    ▶[**다운로드**](https://github.com/ojdkbuild/ojdkbuild/releases/download/1.8.0.191-1/java-1.8.0-openjdk-1.8.0.191-1.b12.ojdkbuild.windows.x86_64.zip)
 
-     ![1561472723416](C:\Users\정수희\AppData\Roaming\Typora\typora-user-images\1561472723416.png)
 
    * **제어판 ▶ 시스템 및 보안 ▶ 시스템** 에서 **고급 시스템 설정**을 클릭한다.
 
-     ![1561472940970](C:\Users\정수희\AppData\Roaming\Typora\typora-user-images\1561472940970.png)
 
      
 
    * **고급텝**의 **환경 변수**를 클릭한다.
 
-     ![1561473063397](C:\Users\정수희\AppData\Roaming\Typora\typora-user-images\1561473063397.png)
 
      
 
@@ -38,7 +35,6 @@
      >
      >  **변수 값**     : JDK 경로
 
-     ![1561473217977](C:\Users\정수희\AppData\Roaming\Typora\typora-user-images\1561473217977.png)
 
    * 추가한 JAVA_HOME 을 Path 에 추가 하여 수정한다.
 
@@ -46,7 +42,6 @@
      >
      > **변수 값**     : %JAVA_HOME%\bin;
 
-     ![1561473357376](C:\Users\정수희\AppData\Roaming\Typora\typora-user-images\1561473357376.png)
 
 
 
@@ -62,7 +57,6 @@
 
      Ex >  Download STS4 Windows 64-bit ( Spring Tools Suite 4 for Eclipse )
 
-     ![1561474293394](C:\Users\정수희\AppData\Roaming\Typora\typora-user-images\1561474293394.png)
 
 ## 3. 소스 Import 및 실행 방법
 
@@ -83,17 +77,13 @@
 
 * **마우스 우클릭 > Run As > JUnit Test** 를 클릭하여 실행합니다.
 
-        
+  ​      
 
 ## 4. 프로젝트 설정 내용
 
 ## 5. 문제 해결 방법
 
-
-
-#### 공통 사항
-
-------
+### 공통 사항
 
 #### 1. 입/출력 JSON 처리
 
@@ -107,7 +97,7 @@
 
 JSON 입력 값을 직접 파싱을 하고 인터페이스를 만드는 등을 작업을 거치지 않고
 
-*Jackson* 라이브러리가 제공하는 **`ObjectMapper`** 를 이용하여 **`VO`**객체로 변환 시켜 주었다.
+*Jackson* 라이브러리가 제공하는 **`ObjectMapper`** 를 이용하여 **`VO`** 객체로 변환 시켜 주었다.
 
 ##### **<u>리턴값  처리</u>**
 
@@ -115,7 +105,7 @@ JSON 입력 값을 직접 파싱을 하고 인터페이스를 만드는 등을 �
 
 
 
-```
+```java
  @GetMapping("/API1")
  public ResponseEntity<List<API1ResultVO>> getAPI1(@RequestBody String reqBody)
  	throws JsonParseException, JsonMappingException, IOException {
@@ -126,17 +116,15 @@ JSON 입력 값을 직접 파싱을 하고 인터페이스를 만드는 등을 �
      List<API1ResultVO> resutVO = apiMapper.getAPI1(api1RepVO);
      return new ResponseEntity<List<API1ResultVO>>(resutVO,HttpStatus.OK);
  }
- ```
+```
 
 
-
-------
 
 #### **2. Test를 위한 데이터 입력**
 
 해당 과제는 배포 후 쉽게 테스트 할 수 있었야 했다.
 
-때문에 `@PostConstruct` 와**opencsv** 를 이용하여 WAS가 띄워질 때 csv 파일 내용을 **h2 DB에 입력**하였다.
+때문에 **`@PostConstruc`**t 와**opencsv** 를 이용하여 WAS가 띄워질 때 csv 파일 내용을 **<u>h2** DB에 입력</u>하였다.
 
 
 
@@ -152,7 +140,7 @@ JSON 입력 값을 직접 파싱을 하고 인터페이스를 만드는 등을 �
 
 
 
-**@PostConstruct**
+**@PostConstruct**            * 참고 : CsvFileRead.java
 
 ```java
 	@PostConstruct
