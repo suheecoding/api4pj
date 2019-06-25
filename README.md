@@ -6,9 +6,12 @@
 
 * **프레임웍** : Spring boot(Maven)
 
-*  **DataBase** : h2
+* **DataBase** : h2
 
-*  **HTTP 통신** : Get 방식 ( 입/출력 모두 Json )
+* **HTTP 통신** : Get 방식 ( 입/출력 모두 Json )
+
+* **인코딩** : UTF8
+
 
   
 
@@ -18,7 +21,7 @@
 
    * JDK를 다운 받아 원하는 경로에서 압축을 해제한다.    ▶[**다운로드**](https://github.com/ojdkbuild/ojdkbuild/releases/download/1.8.0.191-1/java-1.8.0-openjdk-1.8.0.191-1.b12.ojdkbuild.windows.x86_64.zip)
    
-   * 제어판 ▶ 시스템 및 보안 ▶ 시스템** 에서 **고급 시스템 설정**을 클릭한다.
+   * **제어판 ▶ 시스템 및 보안 ▶ 시스템** 에서 **고급 시스템 설정**을 클릭한다.
    
    * **고급텝**의 **환경 변수**를 클릭한다.
    
@@ -49,6 +52,8 @@
      다운로드 후 원하는 경로에 압축을 해제 합니다.  ▶[**[ 다운로드 ]**](https://spring.io/tools)
 
      Ex >  Download STS4 Windows 64-bit ( Spring Tools Suite 4 for Eclipse )
+     
+     
 
 
 ## 3. 소스 Import 및 실행 방법
@@ -67,11 +72,90 @@
 - 아래에 적힌 경로의 파일을 우클릭합니다.
 
   **경로** : /api4pj/src/test/java/com/kakaopay/api4pj/Api4pjApplicationTests.java
+  
 
 * **마우스 우클릭 > Run As > JUnit Test** 를 클릭하여 실행합니다.
-      
 
-## 4. 프로젝트 설정 내용
+
+## 4. 프로젝트 설정 내용 _ application.properties
+
+1.  #### 인코딩
+
+   ```
+   #ENCODING UTF8
+   spring.http.encoding.charset=UTF-8
+   spring.http.encoding.enabled=true
+   spring.http.encoding.force=true
+   ```
+   
+   
+   
+2. #### MyBatis
+
+   ```
+   #MyBatis
+   mybatis.mapper-locations=mapper/*.xml
+   mybatis.type-aliases-package=com.kakaopay.api4pj
+   mybatis.type-handlers-package=com.kakaopay.api4pj
+   mybatis.configuration.jdbc-type-for-null=NULL
+   mybatis.configuration.map-underscore-to-camel-case=true
+   ```
+
+   
+
+3. #### **DB**
+
+   ```
+   #H2_DB
+   spring.h2.console.enabled=true
+   
+   #DataSource
+   spring.datasource.driverClassName=net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+   spring.datasource.url=jdbc:log4jdbc:h2:mem:testdb
+   spring.datasource.username=sa
+   spring.datasource.password=
+   ```
+
+   
+
+4. #### **log 설정**    logback-spring.xml
+
+   ```
+   <configuration>
+       <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+       <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+           <encoder>
+               <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+           </encoder>
+       </appender>
+   
+       <logger name="jdbc" level="OFF"/>
+       <logger name="jdbc.sqlonly" level="OFF"/>
+       <logger name="jdbc.sqltiming" level="INFO"/>
+       <logger name="jdbc.audit" level="OFF"/>
+       <logger name="jdbc.resultset" level="OFF"/>
+       <logger name="jdbc.resultsettable" level="INFO"/>
+       <logger name="jdbc.connection" level="OFF"/>    
+       <logger name="com.kakaopay.api4pj" level="DEBUG"/>
+       <root level="INFO">
+           <appender-ref ref="STDOUT" />
+       </root>
+   
+   </configuration>
+   ```
+
+   
+
+   
+
+5. #### JSON 예쁘게 찍기
+
+   ```
+   #ResponseEntity pretty-print
+   spring.jackson.serialization.INDENT_OUTPUT=true
+   ```
+
+   
 
 ## 5. 문제 해결 방법
 
@@ -287,7 +371,7 @@ SELECT year, name, acctNo, sumAmt			-- 출력 값
 
    
    
-   거래가 없는 고객을 추출해야하므로 **`AND NOT EXISTS(서브쿼리)`**를 이용한다.
+   거래가 없는 고객을 추출해야하므로 **`AND NOT EXISTS(서브쿼리)`** 를 이용한다.
    
    **`NOT EXISTS()`** 는 <u>‘서브쿼리’ 내용이 존재 하지 않은 경우</u>를 조건으로 실행되기 때문이다.
    
@@ -335,11 +419,11 @@ SELECT {입력값 year} AS year
 
 3. 거래가 <u>취소 여부가 'N'</u>인 항목을 추출해야한다.
 
-4. <u>출력 형태가 **JSON 배열**</u> 이므로 **‘연도 리스트’의 길이만큼  배열에 추가**해야한다.
+4. <u>출력 형태가 JSON 배열</u> 이므로 **‘연도 리스트’의 길이만큼  배열에 추가**해야한다.
 
-5. **[조건 4]**의 이유 때문에 거래 내역의 **연도 리스트를 구해야한다.**
+5. **[조건 4]** 의 이유 때문에 거래 내역의 **연도 리스트를 구해야한다.** 
 
-   **`h2`**의 DB **`ISO_YEAR()`** 함수를 이용하여 거래 일자를 **‘연도’**로 변환시켜 **`Group by`** 하여 
+   **`h2`** DB **`ISO_YEAR()`** 함수를 이용하여 거래 일자를 연도로 변환시켜 **`Group by`** 하여 
 
    거래 내역 정보 중 존재하는 <u>연도 리스트를 추출</u>한다.
 
@@ -488,17 +572,16 @@ HTTP STATUS ; 404
 
 **`@ExceptionHandler`** 어노테이션을 사용하여 예외를 처리할 클래스를 정의한다. 
 
-**`ResponseEntity`** Map<String, Object> responseBody 를 자동으로 JSON으로 변환 시켜주며
+**`ResponseEntity`** Map<String, Object> responseBody 를 자동으로 JSON으로 변환 시켜주며 
+                    Http Status '404' 를 리턴하였다.
 
-                                 Http Status '404' 를 리턴하였다.
 
 ```java
 @ControllerAdvice
 public class ApiExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Map<String, Object>> notFoundExceptionHandler
-    							(NotFoundException e) {
+    public ResponseEntity<Map<String, Object>> notFoundExceptionHandler (NotFoundException e) {
     
     Map<String, Object> responseBody = new HashMap<>();
     responseBody.put("code", "404");
