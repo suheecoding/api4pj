@@ -592,6 +592,7 @@ SELECT C.관리점 명           AS brName    -- 출력항목
    AND B.관리점 코드 = C.관리점코드
    GROUP C.관리점 명 ,B.관리점코드, ISO_YEAR(A.거래일자)
    ORDER BY ISO_YEAR(A.거래일자) ASC, 거래 금액 합계 DESC		-- 정렬
+   GROUP BY C.관리점명, B.관리점코드
 ```
 
 
