@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kakao.api4pj.mapper.ApiMapper">
+<mapper namespace="com.kakaopay.api4pj.mapper.ApiMapper">
 	
 	<insert id="insertAccInfo" parameterType="java.util.List"> 
 			INSERT INTO ACCINFO 
@@ -61,7 +61,7 @@
 	</insert> 
 	
 	
-	<select id="getAPI1" resultType="com.kakao.api4pj.vo.API1ResultVO">
+	<select id="getAPI1" resultType="com.kakaopay.api4pj.vo.API1ResultVO">
 	
 			SELECT YEAR, NAME, ACCT_NO, SUM_AMT
 			FROM (
@@ -102,7 +102,7 @@
 				) WHERE RANKING =1;
 	</select>
 	
-	<select id="getAPI2" resultType="com.kakao.api4pj.vo.API2ResultVO">
+	<select id="getAPI2" resultType="com.kakaopay.api4pj.vo.API2ResultVO">
 			SELECT
 					#{year} AS YEAR
 					,A.NAME
@@ -118,7 +118,7 @@
 							)
 	</select>
 	
-	<select id="getAPI3" parameterType="java.util.Map" resultType="com.kakao.api4pj.vo.API3ResultVO">
+	<select id="getAPI3" parameterType="java.util.Map" resultType="com.kakaopay.api4pj.vo.API3ResultVO">
 			SELECT	  C.brName
 					, B.brCode
 					, SUM(A.trnFldAmt ) AS sumAmt
@@ -134,7 +134,7 @@
 			ORDER BY ISO_YEAR(A.trnFldDat) ASC, sumAmt DESC
 	</select>
 	
-	<select id="getAPI4" parameterType="com.kakao.api4pj.vo.API4ReqVO" resultType="com.kakao.api4pj.vo.API4ResultVO">
+	<select id="getAPI4" parameterType="com.kakaopay.api4pj.vo.API4ReqVO" resultType="com.kakaopay.api4pj.vo.API4ResultVO">
 			SELECT A.BRNAME, A.BRCODE, SUM(B.TRNFLDAMT) AS SUMAMT
 			FROM (
 					SELECT	A.ACCTNO

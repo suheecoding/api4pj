@@ -16,7 +16,7 @@
     <logger name="jdbc.resultsettable" level="INFO"/>
     <logger name="jdbc.connection" level="OFF"/>
     
-    <logger name="com.kakao.api4pj" level="DEBUG"/>
+    <logger name="com.kakaopay.api4pj" level="DEBUG"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />
