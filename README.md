@@ -498,7 +498,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Map<String, Object>> notFoundExceptionHandler
-    														(NotFoundException e) {
+    							(NotFoundException e) {
     
     Map<String, Object> responseBody = new HashMap<>();
     responseBody.put("code", "404");
