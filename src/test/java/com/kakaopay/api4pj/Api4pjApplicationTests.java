@@ -39,12 +39,14 @@ public class Api4pjApplicationTests {
 	ApiMapper apiMapper;
 	
 	
-	@Test
+	@Test  // << JUnit Test 실행시 제외 시키고 싶다면 주석 처리 하여주세요 //@Test
 	public void dbAPI1() {
-		logger.debug("jUnit API1 테스트");
+		logger.debug("jUnit 문제 1번 API1 테스트");
 		
 		MvcResult mvcResult = null;
 		API1ReqVO api1ReqVO = new API1ReqVO();
+		
+		// 아래 값을 변경하며 테스트 하여 주세요. 
 		api1ReqVO.setYear(2018);
 		api1ReqVO.setName("계정명");
 		api1ReqVO.setAcctNo("계좌번호");
@@ -66,20 +68,23 @@ public class Api4pjApplicationTests {
 		if (mvcResult != null) {
 			try {
 				String resultBody = mvcResult.getResponse().getContentAsString();
-				logger.debug("\n\n'>>>>>>>> API1 결과 <<<<<<<<<'\n\n{}", resultBody);
+				logger.debug("\n\n'>>>>>>>> 문제 1번 API1 결과 <<<<<<<<<'\n\n{}", resultBody);
 			} catch (UnsupportedEncodingException e) {
 				logger.error("resultBody UnsupportedEncodingException",e);
 			}
 		}
 	}
 	
-	@Test
+	@Test  // << JUnit Test 실행시 제외 시키고 싶다면 주석 처리 하여주세요 //@Test
 	public void dbAPI2() {
-		logger.debug("jUnit API2 테스트");
+		logger.debug("jUnit 문제 2번 API2 테스트");
 		
 		MvcResult mvcResult = null;
 		API2ReqVO api2ReqVO = new API2ReqVO();
-		api2ReqVO.setYear(2018); // or 2019 입력시 출력 > 0000, 2222 등 입력하게되면 해당 년도 거래 내역이 없으므로 전체 조회 됨.
+		
+		// 아래 값을 변경하며 테스트 하여 주세요.
+		// 0000, 2222 등 입력하게되면 거래 내역에 해당 연도 정보가 없으므로 전체 조회 됨.
+		api2ReqVO.setYear(2018); 
 		api2ReqVO.setName("계정명");
 		api2ReqVO.setAcctNo("계좌번호");
 		
@@ -99,17 +104,18 @@ public class Api4pjApplicationTests {
 		if (mvcResult != null) {
 			try {
 				String resultBody = mvcResult.getResponse().getContentAsString();
-				logger.debug("\n\n'>>>>>>>> API2 결과 <<<<<<<<<'\n\n{}", resultBody);
+				logger.debug("\n\n'>>>>>>>> 문제 2번 API2 결과 <<<<<<<<<'\n\n{}", resultBody);
 			} catch (UnsupportedEncodingException e) {
 				logger.error("resultBody UnsupportedEncodingException",e);
 			}
 		}
 	}
 	
-	@Test
+	@Test  // << JUnit Test 실행시 제외 시키고 싶다면 주석 처리 하여주세요 //@Test
 	public void dbAPI3() { 
 		logger.debug("jUnit API3 테스트");
 		MvcResult mvcResult = null;
+		// 입력값이 없습니다.
 		try {
 			mvcResult = mvc.perform(get("/API3"))
 					.andExpect(status().isOk())
@@ -121,16 +127,16 @@ public class Api4pjApplicationTests {
 		if (mvcResult != null) {
 			try {
 				String resultBody = mvcResult.getResponse().getContentAsString();
-				logger.debug("\n\n'>>>>>>>> API3 결과 <<<<<<<<<'\n\n{}", resultBody);
+				logger.debug("\n\n'>>>>>>>> 문제 3번 API3 결과 <<<<<<<<<'\n\n{}", resultBody);
 			} catch (UnsupportedEncodingException e) {
 				logger.error("resultBody UnsupportedEncodingException",e);
 			}
 		}
 	}
 	
-	@Test
+	@Test  // << JUnit Test 실행시 제외 시키고 싶다면 주석 처리 하여주세요 //@Test
 	public void dbAPI4_1() {
-		logger.debug("jUnit API4_1 테스트 판교점인 경우 Test");
+		logger.debug("jUnit 문제 4번 API4_1 테스트 판교점인 경우 Test");
 		MvcResult mvcResult = null;
 		
 		API4ReqVO api4ReqVO = new API4ReqVO();
@@ -153,7 +159,7 @@ public class Api4pjApplicationTests {
 		if (mvcResult != null) {
 			try {
 				String resultBody = mvcResult.getResponse().getContentAsString();
-				logger.debug("\n\n'>>>>>>>> API4 판교점 결과 <<<<<<<<<'\n\n{}", resultBody);
+				logger.debug("\n\n'>>>>>>>> 문제 4번 API4 판교점 결과 <<<<<<<<<'\n\n{}", resultBody);
 			} catch (UnsupportedEncodingException e) {
 				logger.error("resultBody UnsupportedEncodingException",e);
 			}
@@ -161,9 +167,9 @@ public class Api4pjApplicationTests {
 	}
 	
 	
-	@Test
+	@Test  // << JUnit Test 실행시 제외 시키고 싶다면 주석 처리 하여주세요 //@Test
 	public void dbAPI4_2() {
-		logger.debug("jUnit API4_2 테스트 분당점인 경우 Test");
+		logger.debug("jUnit 문제 4번 API4_2 테스트 분당점인 경우 Test");
 		MvcResult mvcResult = null;
 		
 		API4ReqVO api4ReqVO = new API4ReqVO();
@@ -186,7 +192,7 @@ public class Api4pjApplicationTests {
 		if (mvcResult != null) {
 			try {
 				String resultBody = mvcResult.getResponse().getContentAsString();
-				logger.debug("\n\n'>>>>>>>> API4 분당점 결과 <<<<<<<<<'\n\n{}", resultBody);
+				logger.debug("\n\n'>>>>>>>> 문제 4번 API4 분당점 결과 <<<<<<<<<'\n\n{}", resultBody);
 			} catch (UnsupportedEncodingException e) {
 				logger.error("resultBody UnsupportedEncodingException",e);
 			}
