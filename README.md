@@ -17,27 +17,22 @@
 1. ##### **JDK 다운로드 및 환경 변수 설정**
 
    * JDK를 다운 받아 원하는 경로에서 압축을 해제한다.    ▶[**다운로드**](https://github.com/ojdkbuild/ojdkbuild/releases/download/1.8.0.191-1/java-1.8.0-openjdk-1.8.0.191-1.b12.ojdkbuild.windows.x86_64.zip)
-
-
-   * **제어판 ▶ 시스템 및 보안 ▶ 시스템** 에서 **고급 시스템 설정**을 클릭한다.
-
-
-     
-
+   
+   * 제어판 ▶ 시스템 및 보안 ▶ 시스템** 에서 **고급 시스템 설정**을 클릭한다.
+   
    * **고급텝**의 **환경 변수**를 클릭한다.
-
-
-     
-
+   
    * **새로 만들기**를 클릭하여 JAVA_HOME 을 추가한다.
-
-     >  **변수 이름** : JAVA_HOME
+   
+     > **변수 이름** : JAVA_HOME
      >
-     >  **변수 값**     : JDK 경로
-
-
+     > **변수 값**     : JDK 경로
+     >
+   
+   
+   
    * 추가한 JAVA_HOME 을 Path 에 추가 하여 수정한다.
-
+   
      > **변수 이름** : Path
      >
      > **변수 값**     : %JAVA_HOME%\bin;
@@ -51,9 +46,7 @@
 
      환경에 맞는 STS 를 다운로드 합니다.
 
-     다운로드 후 원하는 경로에 압축을 해제 합니다.
-
-     [**[▶ 다운로드 ]**](https://spring.io/tools)
+     다운로드 후 원하는 경로에 압축을 해제 합니다.  ▶[**[ 다운로드 ]**](https://spring.io/tools)
 
      Ex >  Download STS4 Windows 64-bit ( Spring Tools Suite 4 for Eclipse )
 
@@ -76,34 +69,35 @@
   **경로** : /api4pj/src/test/java/com/kakaopay/api4pj/Api4pjApplicationTests.java
 
 * **마우스 우클릭 > Run As > JUnit Test** 를 클릭하여 실행합니다.
-
-  ​      
+      
 
 ## 4. 프로젝트 설정 내용
 
 ## 5. 문제 해결 방법
 
-### 공통 사항
+### 1. 공통 사항
 
-#### 1. 입/출력 JSON 처리
+* #### 입/출력 JSON 처리
 
-4개의 모든 API의 입/출력은 JSON으로 이루어져야 한다.
+  4개의 모든 API의 입/출력은 JSON으로 이루어져야 한다.
 
-때문에 JSON 데이터 구조를 처리해주는 **`Jackson` 라이브러리**를 이용하였다.
+  때문에 JSON 데이터 구조를 처리해주는 **`Jackson` 라이브러리**를 이용하였다.
 
-   
+  
 
-##### **<u>입력값 처리</u>**
+  **<u>입력값 처리</u>**
 
-JSON 입력 값을 직접 파싱을 하고 인터페이스를 만드는 등을 작업을 거치지 않고
+  JSON 입력 값을 직접 파싱을 하고 인터페이스를 만드는 등을 작업을 거치지 않고
 
-*Jackson* 라이브러리가 제공하는 **`ObjectMapper`** 를 이용하여 **`VO`** 객체로 변환 시켜 주었다.
+  *Jackson* 라이브러리가 제공하는 **`ObjectMapper`** 를 이용하여 **`VO`** 객체로 변환 시켜 주었다.
 
-##### **<u>리턴값  처리</u>**
+  
 
-**`VO`** 객체의 데이터를 JSON 형태로 자동으로 변환 시켜 주는 **`ResponseEntity`** 이용하여 리턴 시켜주었다.
+  **<u>리턴값  처리</u>**
 
+  **`VO`** 객체의 데이터를 JSON 형태로 자동으로 변환 시켜 주는 **`ResponseEntity`** 이용하여 리턴 시켜주었다.
 
+  
 
 ```java
  @GetMapping("/API1")
@@ -120,11 +114,15 @@ JSON 입력 값을 직접 파싱을 하고 인터페이스를 만드는 등을 �
 
 
 
-#### **2. Test를 위한 데이터 입력**
+* #### **Test를 위한 csv 데이터 입력**
 
-해당 과제는 배포 후 쉽게 테스트 할 수 있었야 했다.
+  해당 과제는 배포 후 쉽게 테스트 할 수 있었야 했다.
 
-때문에 **`@PostConstruct`** 와**opencsv** 를 이용하여 WAS가 띄워질 때 csv 파일 내용을 **<u>h2** DB에 입력</u>하였다.
+  테스트 담당자가 DB를 생성하고, 데이터를 Insert 하는 수고로움을 줄이기 위하여
+
+  **`@PostConstruct`** 와**opencsv** 를 이용하여 WAS가 띄워질 때
+
+   csv 파일 내용 Read 하여 <u>**h2 DB에 입력**</u>하였다.
 
 
 
@@ -140,15 +138,15 @@ JSON 입력 값을 직접 파싱을 하고 인터페이스를 만드는 등을 �
 
 
 
-**@PostConstruct**            * 참고 : CsvFileRead.java
+**@PostConstruct**            
 
 ```java
 	@PostConstruct
 	private void readCsv() {
 		try {
-			this.ReadCsv("AccInfo"); 
-			this.ReadCsv("BranchInfo");
-			this.ReadCsv("TranHis");
+			this.ReadCsv("AccInfo");		-- 데이터_계좌정보.csv
+			this.ReadCsv("BranchInfo");		-- 데이터_관리점정보.csv
+			this.ReadCsv("TranHis");		-- 데이터_거래내역.csv
 		} catch (Exception e) {
 			logger.debug("error",e);
 		}
@@ -161,7 +159,7 @@ JSON 입력 값을 직접 파싱을 하고 인터페이스를 만드는 등을 �
 
 ------
 
-### <문제 1>
+### 2. <문제 1>의 해설
 
 <문제 1>의 2018년, 2019년의 합계 금액이 가장 많은 고객을 추출하기 위해서 아래와 같은 조건이 필요하다.
 
@@ -197,7 +195,7 @@ JSON 입력 값을 직접 파싱을 하고 인터페이스를 만드는 등을 �
 
    h2 DB가 제공하는 **`ISO_YEAR()`** 함수를 이용하여 변환 시켜주었다.
 
-6. 연도별 고객의 합계를 구해야 하므로 **‘연도’과 ‘계좌번호’ 로  GROUP BY 를 이용하여 그룹핑** 해야한다.
+6. 연도별 고객의 합계를 구해야 하므로 **‘연도’과 ‘계좌번호’ 로  `GROUP BY` 를 이용하여 그룹핑** 해야한다.
 
    
 
@@ -218,25 +216,25 @@ GROUP BY ISO_YEAR(B.거래일자), A.계좌 번호 , A.계좌명
 
 > Oracle DB 같은 경우
 
-RANK() OVER (PARTITION BY ‘년도’ ORDER BY ‘계좌별 합계 금액’ DESC ) 하여
+**`RANK() OVER (PARTITION BY ‘년도’ ORDER BY ‘계좌별 합계 금액’ DESC )`** 하여
 
-‘1’ 인 것들만 조회하면 년도별 합계 금액이 가장 큰 고객을 추출할 수 있다.
+RANK가 ‘1’ 인 것들만 조회하면 년도별 합계 금액이 가장 큰 고객을 추출할 수 있다.
 
  
 
 > h2 DB 같은 경우 
 
-RANK() OVER (PARTITION BY ‘ ’ ORDER BY ‘ ’) 함수를 <u>지원하지 않기 때문에</u>
+`RANK() OVER (PARTITION BY ‘ ’ ORDER BY ‘ ’)` 함수를 <u>지원하지 않기 때문에</u>
 
 위에서 만든 동일 한 정보 2개를 만들어 동일 연도의 금액들을 <u>비교하여 순위를 구해야 한다.</u>
 
 ```
-SELECT COUNT(*) AS 순위
+SELECT COUNT(*) AS 순위                      -- 순위
   FROM ( 년도, 계좌별 조회 정보 ) A
       ,( 년도, 계좌별 조회 정보 ) B
 WHERE A.합계금액 <= B.합계금액					-- 금액 비교
   AND A.년도 = B.년도
-GROUP BY A.계좌 번호, A.년도 
+GROUP BY A.계좌 번호, A.년도
 ```
 
 
@@ -261,7 +259,7 @@ SELECT year, name, acctNo, sumAmt			-- 출력 값
 
 ------
 
-### <문제 2>
+### 3. <문제 2>의 해성
 <문제 2>의 2018년 또는 2019년 거래가 없는 고객을 추출하기 위해서 아래와 같은 조건이 필요하다.
 
 #####    **[ 조건 ]**
@@ -270,7 +268,7 @@ SELECT year, name, acctNo, sumAmt			-- 출력 값
 
    ‘입력 값은 아래와 같은 값을 사용.’ 이라 명시 되어 있어
 
-   출력값과 동일하게 year, name, acctno 값들이 입력 받아야한다.
+   출력값과 동일하게 year, name, accTno 값들이 입력 받아야한다.
 
    추출 조건 중 ‘연도’ 라는 조건이 들어갔기 때문에 입력값 중 ‘year’을 추출 조건으로 이용한다.
 
@@ -287,11 +285,13 @@ SELECT year, name, acctNo, sumAmt			-- 출력 값
    > * 2018년, 2019년 모두 취소여부가 ‘N’ 인 거래 내용이 없는 경우.
    > * 2018년 또는 2019년 취소여부가 ‘N’ 인 거래 내용이 없는 경우.
 
-       거래가 없는 고객을 추출해야하므로 **AND NOT EXISTS(서브쿼리)**를 이용한다.
-
-       NOT EXISTS() 는 <u>‘서브쿼리’ 내용이 존재 하지 않은 경우</u>를 조건으로 실행되기 때문이다.
-
- 
+   
+   
+   거래가 없는 고객을 추출해야하므로 **`AND NOT EXISTS(서브쿼리)`**를 이용한다.
+   
+   **`NOT EXISTS()`** 는 <u>‘서브쿼리’ 내용이 존재 하지 않은 경우</u>를 조건으로 실행되기 때문이다.
+   
+   
 
 ```
 SELECT {입력값 year} AS year
@@ -308,7 +308,7 @@ SELECT {입력값 year} AS year
 ```
 ------
 
-### <문제 3> 의 해설
+### 4. <문제 3> 의 해설
 <문제 3>의 연도별, 관리점별 거래금액 합계를 큰 순서대로 출력하기 위해서 아래와 같은 조건이 필요하다.
 
 #####    **[ 조건 ]**
@@ -339,7 +339,7 @@ SELECT {입력값 year} AS year
 
 5. **[조건 4]**의 이유 때문에 거래 내역의 **연도 리스트를 구해야한다.**
 
-   h2의 DB **ISO_YEAR()** 함수를 이용하여 거래 일자를 ‘연도’로 변환시켜 **Group by** 하여 
+   **`h2`**의 DB **`ISO_YEAR()`** 함수를 이용하여 거래 일자를 **‘연도’**로 변환시켜 **`Group by`** 하여 
 
    거래 내역 정보 중 존재하는 <u>연도 리스트를 추출</u>한다.
 
@@ -405,5 +405,108 @@ JSON 배열로 출력하기
 	return new ResponseEntity<List<Map<String,Object>>>(resultVO,HttpStatus.OK);
 }
 ```
+------
 
+### 5. <문제 4> 의 해설
+<문제 4>의 지점명으로 해당 지점의 거래 금액의 합계를 출력하기 위해서 아래와 같은 조건이 필요하다.
+
+#####    **[ 조건 ]**
+
+1. **입력값이 있다.**
+
+   {brName  : 관리점명} 이라고 명시 되어 있으며,
+
+   지점에 대한 거래금앱 합계를 구하기 위해서 **조회 조건으로 사용**해야한다.
+
+   
+
+2. **관리점 정보와 거래 내역을 이용해야한다.**
+
+   해당 연결 고리는 관리점 코드 이다.
+
+3. 거래 내역의 **취소 여부가 'N'**이어야 한다.
+
+4. '이관 여부' 또는 '이관 전 관리점 코드', '이관 후 관리점 코드' 정보가 없으므로
+
+   **`DECODE()`** 함수를 이용하여 **‘분당점’의 정보를 ‘판교점’으로 수정**한 데이터를 만들어
+
+   기초 데이터를 만들어야 한다.
+
+   > DECODE(관리점 코드, 'B', 'A', 관리점 코드,) AS 관리점 코드
+   >
+   > DECODE(관리점명, '분당점', '판교점', 관리점명) AS 관리점명
+
+
+
+>  **관리점별 거래금액 합계 출력**
+
+```
+SELECT A.관리점명     AS brName     -- 출력 항목
+     , A.관리점코드    AS brCode    -- 출력 항목
+     , SUM(B.거래금액) AS sumAmt    -- 출력 항목
+    FROM (
+        SELECT  A.계좌번호
+        ,DECODE(A.BRCODE, 'B', 'A', A.BRCODE) AS 관리점코드
+        ,DECODE(B.BRNAME , '분당점', '판교점', B.BRNAME ) AS 관리점명
+        FROM 계좌정보 A
+            ,관리점정보 B
+        WHERE A.관리점코드 = B.관리점코드
+    )A
+    ,거래내역 B
+WHERE A.계좌번호= B.계좌번호
+  AND B.취소여부='N' 
+  AND A.관리점명= #{입력 받은 brName}
+  
+```
+
+
+
+#### **분당 점인 경우** 처리
+
+> **분당점인 경우 출력해야하는 내용**
+
+```
+HTTP STATUS ; 404
+{ “code”:”404”,
+  “메시지”:”br code not found error”
+}
+```
+
+‘분당점’은 ‘판교점’으로 이관되어 없는 관리점이므로 조회시 조회되는 내용이 없다.
+
+때문에 에러 코드를 리턴해야한다.
+
+에러 코드를 리턴하기 위해 **`@ExceptionHandler`** 를 이용하여 **NotFoundException** 로 처리하였다.
+
+그리고 <u>http status 상태를 리턴해야하므로 **ResponseEntity**를 이용</u>하였다.
+
+
+
+> **Exception 처리**
+
+**`@ControllerAdvice`** 는 해당 클래스가 당신의 어플리케이션의 예외처리를 맡을 거라고 알려주게 된다.
+
+**`@ExceptionHandler`** 어노테이션을 사용하여 예외를 처리할 클래스를 정의한다. 
+
+**`ResponseEntity`** Map<String, Object> responseBody 를 자동으로 JSON으로 변환 시켜주며
+
+                                 Http Status '404' 를 리턴하였다.
+
+```java
+@ControllerAdvice
+public class ApiExceptionHandler {
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Map<String, Object>> notFoundExceptionHandler
+    														(NotFoundException e) {
+    
+    Map<String, Object> responseBody = new HashMap<>();
+    responseBody.put("code", "404");
+    responseBody.put("메세지", e.getMessage());
+    
+    return new ResponseEntity<Map<String, Object>>(responseBody,HttpStatus.NOT_FOUND);
+
+    }
+}						 
+```
 
