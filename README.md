@@ -287,9 +287,9 @@ SELECT year, name, acctNo, sumAmt			-- 출력 값
    > * 2018년, 2019년 모두 취소여부가 ‘N’ 인 거래 내용이 없는 경우.
    > * 2018년 또는 2019년 취소여부가 ‘N’ 인 거래 내용이 없는 경우.
 
-​       거래가 없는 고객을 추출해야하므로 **AND NOT EXISTS(서브쿼리)**를 이용한다.
+       거래가 없는 고객을 추출해야하므로 **AND NOT EXISTS(서브쿼리)**를 이용한다.
 
-​       NOT EXISTS() 는 <u>‘서브쿼리’ 내용이 존재 하지 않은 경우</u>를 조건으로 실행되기 때문이다.
+       NOT EXISTS() 는 <u>‘서브쿼리’ 내용이 존재 하지 않은 경우</u>를 조건으로 실행되기 때문이다.
 
  
 
@@ -306,4 +306,104 @@ SELECT {입력값 year} AS year
                           AND ISO_YEAR(B.거래 일자) = {입력값 year}
                      )
 ```
+------
+
+### <문제 3> 의 해설
+<문제 3>의 연도별, 관리점별 거래금액 합계를 큰 순서대로 출력하기 위해서 아래와 같은 조건이 필요하다.
+
+#####    **[ 조건 ]**
+
+1. **입력값이 없다.**
+
+   <문제 1>, <문제 2> 처럼 ‘입력 값은 아래와 같은 값을 사용.’ 이라 명시 되어 있지 않고
+
+   출력 내용만 적혀 있으므로 입력 값은 없다.
+
+   
+
+2. **거래 내역, 관리점 정보, 계좌 정보 모두 이용 해야한다.**
+
+   거래 정보를 추출 해야하고,   관리점명, 관리점 코드가 출력 값이므로
+
+   관리점 정보를 이용해야한다.
+
+   그리고 거래내역과 관리점 정보의 연관된 연결 고리가 없으므로
+
+   관리점 코드와, 계좌 정보가 모두 있는 계좌 정보도 같이 이용해야한다.
+
+   
+
+3. 거래가 <u>취소 여부가 'N'</u>인 항목을 추출해야한다.
+
+4. <u>출력 형태가 **JSON 배열**</u> 이므로 **‘연도 리스트’의 길이만큼  배열에 추가**해야한다.
+
+5. **[조건 4]**의 이유 때문에 거래 내역의 **연도 리스트를 구해야한다.**
+
+   h2의 DB **ISO_YEAR()** 함수를 이용하여 거래 일자를 ‘연도’로 변환시켜 **Group by** 하여 
+
+   거래 내역 정보 중 존재하는 <u>연도 리스트를 추출</u>한다.
+
+   
+
+6. **합계금액**이 큰 순서이므로 **ORDER BY 합계 금액 DESC** 를 한다.
+
+   **출력 년도**는 오름 차순이므로 **ORDER BY ‘연도’ ASC**를 한다.
+
+7. 연도별, 관리점별 합계 금액이므로 **GROUP BY 연도, 관리점 코드** 로 그룹핑한다.
+
+ 
+
+> **거래 내역의 '연도 리스트'  추출**
+
+```
+SELECT	ISO_YEAR(거래일자)
+  FROM	거래 내역 A
+ GROUP BY ISO_YEAR(거래일자)
+```
+
+
+
+> **연도별, 관리점별 거래금액 합계 추출**
+
+```
+SELECT C.관리점 명           AS brName    -- 출력항목
+       ,B.관리점코드         AS brCode    -- 출력항목
+       ,SUM(A.거래 금액)     AS sumAmt    -- 출력항목
+  From  거래 내역 A
+       ,계좌 정보 B
+       ,관리점 정보 C
+ WHERE ISO_YEAR(A.거래일자) = {연도} ---- 거래 내역에서 추출한 연도를 입력받아 조회 조건으로 사용
+   AND A.취소 여부 = ‘N’
+   AND A.계좌 번호 = B.계좌 번호
+   AND B.관리점 코드 = C.관리점코드
+   GROUP C.관리점 명 ,B.관리점코드, ISO_YEAR(A.거래일자)
+   ORDER BY ISO_YEAR(A.거래일자) ASC, 거래 금액 합계 DESC		-- 정렬
+```
+
+
+
+JSON 배열로 출력하기
+
+```java
+@GetMapping("/API3")
+	public ResponseEntity<List<Map<String,Object>>> getAPI3() throws JSONException {
+	List<Map<String,Object>> resultVO = new ArrayList<>();
+
+	//거래 테이블 년도 리스트 가져오기
+	List<Map<String,Object>> tranYearList = apiMapper.getTranYearList();
+	
+	// 연도 리스트 갯수 만큼 조회하여 List에 add
+	for(int i=0 ; i < tranYearList.size() ; i++) {
+        //연도별, 관리점별 거래금액 합계 조회
+		List<API3ResultVO> api4ResultVo = apiMapper.getAPI3(tranYearList.get(i)); 
+		Map<String,Object> mapVO = new HashMap<>();
+		mapVO.put("year",Integer.parseInt(tranYearList.get(i).get("YEAR").toString()));
+		mapVO.put("list",api4ResultVo);
+		resultVO.add(mapVO);
+	}
+    // ResponseEntity를 이용하여 Map > Json 으로 변환
+	return new ResponseEntity<List<Map<String,Object>>>(resultVO,HttpStatus.OK);
+}
+```
+
 
