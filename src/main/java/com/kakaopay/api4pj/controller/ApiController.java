@@ -50,7 +50,7 @@ public class ApiController {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		API1ReqVO api1RepVO = mapper.readValue(reqBody, API1ReqVO.class);
-		logger.debug("\n\n'>>>>>>>>>> API1 입력 파라미터 및 vo 변환 \n\n ==> reqBody={}, api4RepVO={}\n\n",reqBody,api1RepVO);
+		logger.debug("\n\n'>>>>>>>>>> 문제 2번 API1 입력 파라미터 및 vo 변환 \n\n ==> reqBody={}, api4RepVO={}\n\n",reqBody,api1RepVO);
 		
 		List<API1ResultVO> resutVO = apiMapper.getAPI1(api1RepVO);
 		return new ResponseEntity<List<API1ResultVO>>(resutVO,HttpStatus.OK);
@@ -62,7 +62,7 @@ public class ApiController {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		API2ReqVO api2RepVO = mapper.readValue(reqBody, API2ReqVO.class);
-		logger.debug("\n\n'>>>>>>>>>> API2 입력 파라미터 및 vo 변환 \n\n ==> reqBody={}, api4RepVO={}\n\n",reqBody,api2RepVO);
+		logger.debug("\n\n'>>>>>>>>>> 문제 2번  API2 입력 파라미터 및 vo 변환 \n\n ==> reqBody={}, api4RepVO={}\n\n",reqBody,api2RepVO);
 		
 		List<API2ResultVO> resutVO = apiMapper.getAPI2(api2RepVO);
 		return new ResponseEntity<List<API2ResultVO>>(resutVO,HttpStatus.OK);
@@ -93,7 +93,7 @@ public class ApiController {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		API4ReqVO api4RepVO = mapper.readValue(reqBody, API4ReqVO.class);
-		logger.debug("\n\n'>>>>>>>>>> API4 입력 파라미터 및 vo 변환 \n\n ==> reqBody={}, api4RepVO={}\n\n",reqBody,api4RepVO);
+		logger.debug("\n\n'>>>>>>>>>> 문제 4번 API4 입력 파라미터 및 vo 변환 \n\n ==> reqBody={}, api4RepVO={}\n\n",reqBody,api4RepVO);
 		
 		API4ResultVO resutVO = apiMapper.getAPI4(api4RepVO);
 		if(resutVO == null) {
