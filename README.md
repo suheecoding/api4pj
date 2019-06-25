@@ -1,5 +1,3 @@
-[TOC]
-
 
 ## 1. 프로젝트 기초 정보
 
@@ -16,7 +14,7 @@
 * **인코딩** : UTF8
 
 
-  
+
 
 ## 2. 개발 환경 설정 방법
 
@@ -70,16 +68,118 @@
 
 
 
-#### **3. 2. 빌드 및 JUnit Test**
+#### **3. 2. 빌드 및 JUnit Test 방법**
 
 - 아래에 적힌 경로의 파일을 우클릭합니다.
 
   **경로** : /api4pj/src/test/java/com/kakaopay/api4pj/Api4pjApplicationTests.java
-  
 
 * **마우스 우클릭 > Run As > JUnit Test** 를 클릭하여 실행합니다.
 
+  ### **※ 실행시 문제 1,2,3,4 번의 테스트가 모두 실행됩니다.**
 
+  ※ 테스트 실행시 제외하고 싶은 문제가 있다면 @Test 주석처리하여 주세요.
+
+  ※ 변수 값을 변경해 가며 테스트를 진행합니다.
+
+  
+
+  **[문제 1]의 테스트** 
+
+  * **`dbAPI1()`** 가 호출 됩니다.
+
+    ```
+    @Test  // << JUnit Test 실행시 제외 시키고 싶다면 주석 처리 하여주세요 //@Test
+    	public void dbAPI1() {
+    		logger.debug("jUnit 문제 1번 API1 테스트");
+    		
+    		MvcResult mvcResult = null;
+    		API1ReqVO api1ReqVO = new API1ReqVO();
+    		
+    		// 아래 값을 변경하며 테스트 하여 주세요.
+    		api1ReqVO.setYear(2018);
+    		api1ReqVO.setName("계정명");
+    		api1ReqVO.setAcctNo("계좌번호");
+    		api1ReqVO.setSumAmt(0000);
+    ```
+
+    
+
+  **[문제 2]의 테스트**
+
+  * **`dbAPI2()`** 가 호출 됩니다.
+
+    ```
+    @Test // << JUnit Test 실행시 제외 시키고 싶다면 주석 처리 하여주세요 //@Test
+    	public void dbAPI2() {
+    		logger.debug("jUnit 문제 2번 API2 테스트");
+    		
+    		MvcResult mvcResult = null;
+    		API2ReqVO api2ReqVO = new API2ReqVO();
+    		
+    		// 아래 값을 변경하며 테스트 하여 주세요.
+    		// 0000, 2222 등 입력하게되면 거래 내역에 해당 연도가 없으므로 전체 조회 됩니다.
+    		api2ReqVO.setYear(2018); 
+    		api2ReqVO.setName("계정명");
+    		api2ReqVO.setAcctNo("계좌번호");
+    ```
+
+    
+
+  **[문제 3]의 테스트**
+
+  * **`dbAPI3()`** 가 호출 됩니다.
+
+    ```
+    	@Test  // << JUnit Test 실행시 제외 시키고 싶다면 주석 처리 하여주세요 //@Test
+    	public void dbAPI3() { 
+    		logger.debug("jUnit 문제 3번 API3 테스트");
+    		MvcResult mvcResult = null;
+    		try {
+    			// 입력값이 없습니다.
+    			mvcResult = mvc.perform(get("/API3"))
+    					.andExpect(status().isOk())
+    					.andReturn();
+    		} catch (Exception e) {
+    ```
+
+    
+
+  **[문제 4]의 테스트 1 ★ 판교점 ★**
+
+  * **`dbAPI4_1()`** 가 호출 됩니다.
+
+    ```
+    @Test  // << JUnit Test 실행시 제외 시키고 싶다면 주석 처리 하여주세요 //@Test
+    	public void dbAPI4_1() {
+    		logger.debug("jUnit 문제 4번  API4_1 테스트 판교점인 경우 Test");
+    		MvcResult mvcResult = null;
+    		
+    		API4ReqVO api4ReqVO = new API4ReqVO();
+    		api4ReqVO.setBrName("판교점");
+    		ObjectMapper mapper = new ObjectMapper();
+    ```
+
+    
+
+  **[문제 4]의 테스트 2 ★ 분당점 ★**
+
+  * **`dbAPI4_2()`** 가 호출 됩니다.
+
+    ```
+    @Test   // << JUnit Test 실행시 제외 시키고 싶다면 주석 처리 하여주세요 //@Test
+    	public void dbAPI4_2() {
+    		logger.debug("jUnit 문제 4번 API4_2 테스트 분당점인 경우 Test");
+    		MvcResult mvcResult = null;
+    		
+    		API4ReqVO api4ReqVO = new API4ReqVO();
+    		api4ReqVO.setBrName("분당점");
+    		ObjectMapper mapper = new ObjectMapper();
+    ```
+
+    
+
+ 
 ## 4. 프로젝트 설정 내용 _ application.properties
 
 ### 4. 1. 인코딩
