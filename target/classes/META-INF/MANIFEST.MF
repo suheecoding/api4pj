@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: api4pj
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: D4004008
+Implementation-Vendor-Id: com.kakao
+Build-Jdk: 1.8.0_191-1-ojdkbuild
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/api4pj
+Created-By: Maven Integration for Eclipse
+

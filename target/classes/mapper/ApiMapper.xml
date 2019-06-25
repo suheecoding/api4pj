@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kakao.api4pj.mapper.ApiMapper">
+	
+	<insert id="insertAccInfo" parameterType="java.util.List"> 
+			INSERT INTO ACCINFO 
+			(
+				  ACCTNO
+				, NAME
+				, BRCODE
+			) 
+			VALUES 
+			<foreach collection="list" item="item" separator=" , ">
+			(
+				  #{item.acctNo}
+				, #{item.name}
+				, #{item.brCode}
+			)
+			</foreach>
+			;
+	</insert> 
+	
+	<insert id="insertBranchInfo"  parameterType="java.util.List">
+			INSERT INTO BRANCHINFO
+			(
+				  BRCODE
+				 ,BRNAME 
+			) 
+			VALUES 
+			<foreach collection="list" item="item" separator=" , ">
+			(
+				  #{item.brCode}
+				, #{item.brName}
+			)
+			</foreach>
+			;
+	</insert> 
+	
+	<insert id="insertTranHis" parameterType="java.util.List">
+			INSERT INTO TRANHIS
+			(
+				  TRNFLDDAT
+				, ACCTNO
+				, TRNFLDNBR
+				, TRNFLDAMT
+				, TRNFLDFEE
+				, CANFLDYON
+			) 
+			VALUES 
+			<foreach collection="list" item="item" separator=" , ">
+			(
+				  PARSEDATETIME(#{item.trnFldDat} , 'yyyymmdd')
+				, #{item.acctNo} 
+				, #{item.trnFldNbr}
+				, #{item.trnFldAmt}
+				, #{item.trnFldFee}
+				, #{item.canFldYon}
+			)
+			</foreach>
+			;
+	</insert> 
+	
+	
+	<select id="getAPI1" resultType="com.kakao.api4pj.vo.API1ResultVO">
+	
+			SELECT YEAR, NAME, ACCT_NO, SUM_AMT
+			FROM (
+					SELECT  
+							 MAX(T1.TRNFLDDAT)	AS YEAR
+							,T1.ACCTNO			AS ACCT_NO
+							,MAX(T1.TRNFLDAMT)	AS SUM_AMT
+							,T1.NAME			AS NAME
+							,COUNT(*) RANKING
+					FROM
+						(
+							SELECT  A.ACCTNO   
+									, A.NAME
+									, ISO_YEAR(B.TRNFLDDAT) AS  TRNFLDDAT
+									, SUM( B.TRNFLDAMT - B.TRNFLDFEE) AS  TRNFLDAMT
+							FROM  ACCINFO A
+									,TRANHIS  B
+							WHERE A.ACCTNO = B.ACCTNO
+								AND B.CANFLDYON = 'N'
+							GROUP BY A.ACCTNO, A.NAME ,ISO_YEAR(B.TRNFLDDAT)
+						)T1
+						JOIN 
+						(
+							SELECT	A.ACCTNO
+									, A.NAME
+									, ISO_YEAR(B.TRNFLDDAT) AS  TRNFLDDAT
+									, SUM( B.TRNFLDAMT - B.TRNFLDFEE) AS  TRNFLDAMT
+							FROM  ACCINFO A
+									, TRANHIS  B
+							WHERE A.ACCTNO = B.ACCTNO
+								AND B.CANFLDYON = 'N'
+							GROUP BY A.ACCTNO, A.NAME, ISO_YEAR(B.TRNFLDDAT)
+						)T2
+						ON T1.TRNFLDAMT <![CDATA[ <= ]]>  T2.TRNFLDAMT
+						AND T1.TRNFLDDAT = T2.TRNFLDDAT
+						GROUP BY T1.ACCTNO ,T1.TRNFLDDAT
+						ORDER BY RANKING DESC
+				) WHERE RANKING =1;
+	</select>
+	
+	<select id="getAPI2" resultType="com.kakao.api4pj.vo.API2ResultVO">
+			SELECT
+					#{year} AS YEAR
+					,A.NAME
+					,ACCTNO
+			FROM ACCINFO A
+			WHERE 1=1
+				AND NOT EXISTS (
+								SELECT 1 
+								FROM TRANHIS B 
+								WHERE A.ACCTNO = B.ACCTNO 
+										AND CANFLDYON = 'N'
+										AND ISO_YEAR(B.TRNFLDDAT) = #{year}
+							)
+	</select>
+	
+	<select id="getAPI3" parameterType="java.util.Map" resultType="com.kakao.api4pj.vo.API3ResultVO">
+			SELECT	  C.brName
+					, B.brCode
+					, SUM(A.trnFldAmt ) AS sumAmt
+			FROM TRANHIS A
+					, ACCINFO B
+					, BRANCHINFO C
+			WHERE 1=1
+				AND A.acctNo = B.acctNo
+				AND B.brCode = C.brCode
+				AND A.canFldYon = 'N'
+				AND ISO_YEAR(A.trnFldDat) = #{YEAR}
+			GROUP BY C.brName,B.brCode, ISO_YEAR(A.trnFldDat)
+			ORDER BY ISO_YEAR(A.trnFldDat) ASC, sumAmt DESC
+	</select>
+	
+	<select id="getAPI4" parameterType="com.kakao.api4pj.vo.API4ReqVO" resultType="com.kakao.api4pj.vo.API4ResultVO">
+			SELECT A.BRNAME, A.BRCODE, SUM(B.TRNFLDAMT) AS SUMAMT
+			FROM (
+					SELECT	A.ACCTNO
+							,DECODE(A.BRCODE, 'B', 'A', A.BRCODE) AS BRCODE
+							,DECODE(B.BRNAME , '분당점', '판교점', B.BRNAME ) AS BRNAME
+					FROM ACCINFO A
+						,BRANCHINFO B
+					WHERE A.BRCODE = B.BRCODE
+					)A
+					,TRANHIS B
+			WHERE A.ACCTNO = B.ACCTNO
+				AND B.CANFLDYON ='N'
+				AND A.BRNAME = #{brName}
+	</select>   
+	
+	<select id="getTranYearList" resultType="Map">
+			SELECT ISO_YEAR(A.TRNFLDDAT) AS YEAR
+			FROM TRANHIS A
+			WHERE A.CANFLDYON = 'N'
+			GROUP BY ISO_YEAR(A.TRNFLDDAT)
+	</select>
+
+</mapper>
