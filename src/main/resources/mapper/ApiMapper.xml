@@ -145,6 +145,7 @@
 			WHERE A.ACCTNO = B.ACCTNO
 				AND B.CANFLDYON ='N'
 				AND A.BRNAME = #{brName}
+		        GROUP BY A.BRNAME, A.BRCODE
 	</select>   
 	
 	<select id="getTranYearList" resultType="Map">
