@@ -1,4 +1,4 @@
-1.개발 환경
+# 1.프로젝트 정보
 ---------------
 #####  ● IDE 툴  : STS4 ( Spring Tools Suite 4 for Eclipse )
 #####  ● 개발언어 : Java-1.8.0
@@ -7,9 +7,9 @@
 #####  ● HTTP 통신 : Get 방식 ( 입/출력 모두 Json )
 
 
-2.개발 환경 설정 방법
+# 2.개발 환경 설정 방법
 ------------------- 
- *  **jdk 다운로드 및 환경 변수 설정**
+### ** * jdk 다운로드 및 환경 변수 설정**
  1. openjdk를 다운로드 합니다. ▶ **[다운로드](https://github.com/ojdkbuild/ojdkbuild/releases/download/1.8.0.191-1/java-1.8.0-openjdk-1.8.0.191-1.b12.ojdkbuild.windows.x86_64.zip)**
  
  2. C:\ 경로에 zip 파일을 해제합니다.
@@ -33,8 +33,7 @@
  
  
  
- 
- * **IDE 다운로드 (Spring Tools Suite 4 for Eclipse )**
+###  ** * IDE 다운로드 (Spring Tools Suite 4 for Eclipse )**
  1. STS4 
    다운로드를 위해 Spring Tools로 이동( https://spring.io/tools )하여 환경에 맞는 STS 를 다운로드합니다.
    
@@ -43,7 +42,9 @@
 
 2. 원하는 위치에 zip 파일을 해제합니다.
 
-3.소스 Import 및 빌드 방법
+
+---------------------------------------
+# 3.소스 Import 및 빌드 방법
 ---------------------------------------
 ###  * 소스 Import
 1. Spring boot 를 실행합니다.
@@ -59,5 +60,7 @@
 2. 마우스 우클릭 > Run As > JUnit Test 를 클릭하여 실행합니다.
 
 
-3.문제 해결 
 -------------------
+# 3.문제 해결 
+-------------------
+### * 공통 사항
